@@ -80,30 +80,29 @@
     }
 
     // 3. Функция скачивания (исправленная версия)
-    function downloadMoodboard() {
-        const container = document.querySelector(".main-container");
-        
-        // Проверяем, загрузилась ли библиотека
-        if (typeof html2canvas === 'undefined') {
-            alert("Библиотека для скачивания еще не подгрузилась. Подожди пару секунд.");
-            return;
-        }
-
-        html2canvas(container, {
-            useCORS: true,
-            scale: 2 // Увеличиваем качество при сохранении
-        }).then(function(canvas) {
-            const link = document.createElement('a');
-            link.download = 'my-moodboard.png';
-            link.href = canvas.toDataURL("image/png");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }).catch(function(error) {
-            console.error("Ошибка при скачивании:", error);
-            alert("Что-то пошло не так при создании картинки.");
-        });
+   function downloadMoodboard() {
+    const container = document.getElementById("capture-area"); // Скачиваем только сетку
+    
+    if (typeof html2canvas === 'undefined') {
+        alert("Библиотека еще загружается, подождите 5 секунд...");
+        return;
     }
+
+    html2canvas(container, {
+        useCORS: true,
+        allowTaint: false,
+        logging: true, // Это поможет увидеть ошибки в консоли, если не сработает
+        scale: 2
+    }).then(canvas => {
+        const image = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.download = 'my-moodboard.png';
+        link.href = image;
+        link.click();
+    }).catch(err => {
+        console.error("Ошибка скачивания:", err);
+    });
+}
 </script>
 	
 	<div class="controls">
