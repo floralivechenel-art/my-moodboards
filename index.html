@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Your MoodboarD</title>
+<link rel="stylesheet" type="text/css" href="collage.css">
+</head>
+
+<body>
+	<div class="main-container">
+    <div class="moodboard-grid" id="capture-area">
+        <div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="central-slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+		<div class="slot"><input type="file" onchange="upload(this)"></div>
+</div>
+    <img src="../../Figma/всякое/overlay.png" class="figma-mask" alt="template"/>
+
+</div>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+    // 1. Функция загрузки картинки в слот
+    function upload(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const slot = input.closest('div');
+                if (slot) {
+                    slot.style.backgroundImage = 'url(' + e.target.result + ')';
+                    slot.style.backgroundSize = 'cover';
+                    slot.style.backgroundPosition = 'center';
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // 2. Функция переключения текста
+    function toggleMask() {
+        const mask = document.querySelector('.figma-mask');
+        if (mask) {
+            // Проверяем текущую прозрачность
+            if (mask.style.opacity === "0") {
+                mask.style.opacity = "1";
+            } else {
+                mask.style.opacity = "0";
+            }
+        }
+    }
+
+    // 3. Функция скачивания (исправленная версия)
+    function downloadMoodboard() {
+        const container = document.querySelector(".main-container");
+        
+        // Проверяем, загрузилась ли библиотека
+        if (typeof html2canvas === 'undefined') {
+            alert("Библиотека для скачивания еще не подгрузилась. Подожди пару секунд.");
+            return;
+        }
+
+        html2canvas(container, {
+            useCORS: true,
+            scale: 2 // Увеличиваем качество при сохранении
+        }).then(function(canvas) {
+            const link = document.createElement('a');
+            link.download = 'my-moodboard.png';
+            link.href = canvas.toDataURL("image/png");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }).catch(function(error) {
+            console.error("Ошибка при скачивании:", error);
+            alert("Что-то пошло не так при создании картинки.");
+        });
+    }
+</script>
+	
+	<div class="controls">
+    <button class="btn-toggle" onclick="toggleMask()">Show/Hide Labels</button>
+    <button class="btn-download" onclick="downloadMoodboard()">Download PNG</button>
+</div>
+	
+</body>
+</html>
